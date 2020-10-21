@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}
+    {{ post.title }}
+{% endblock %}
+{% block content %}
+
+    <h2> {{ user.name }} </h2>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 card mb-4  mt-3 left  top">
+                <div class="card-body">
+                    <h1>{% block posttitle %} {{ object.title }} {% endblock %}</h1>
+                    <p class=" text-muted">{{ post.author }} | {{ post.created_on }}</p>
+                    <p class="card-text ">{{ object.content | safe }}</p>
+                </div>
+            </div>
+            {% block sidebar %} {% include 'sidebar.html' %} {% endblock sidebar %}
+        </div>
+        {% if user.is_authenticated %}
+            {% if user.id == post.author.id %}
+                <div class="submit-row">
+                    <p>
+                        <button class="btn btn-dark"><a href="{% url 'edit_post' post.pk %}"> Edit post</a></button>
+                    </p>
+                    <br>
+                    <p>
+                        <button class="btn btn-dark"><a href="{% url 'delete_post' post.pk %}"> Delete post</a></button>
+                    </p>
+                </div>
+            {% endif %}
+            <br>
+            <div class="submit-row">
+            <form action="{% url 'like_post' post.pk %}" method="post">
+                {% csrf_token %}
+                {% if liked %}
+                    <button type="submit", class="btn btn-danger",
+                            name="post_id", value="">Unlike</button>
+                {% else %}
+                    <button type="submit", class="btn btn-dark",
+                            name="post_id", value="">Like</button>
+                {% endif %}
+                - likes {{ post.likes.count }}
+            </form>
+            <form action="{% url 'subscribe_post' post.author.id post.id %}" method="post">
+                {% csrf_token %}
+                {% if post.author.id != user.id %}
+                    {% if subscribed %}
+                        <button type="submit" , class="btn btn-danger" ,
+                                name="post_id" , value="">Unsubscribe
+                        </button>
+                    {% else %}
+                        <button type="submit" , class="btn btn-dark" ,
+                                name="post_id" , value="">Subscribe
+                        </button>
+                    {% endif %}
+                {% endif %}
+            </form>
+            <form action="{% url 'read_status_post'  post.id %}" method="post">
+                {% csrf_token %}
+                {% if post.author.id != user.id %}
+                    {% if read_status %}
+                        <button type="submit" , class="btn btn-success" ,
+                                name="post_id" , value=""> Read
+                        </button>
+                    {% else %}
+                        <button type="submit" , class="btn btn-dark" ,
+                                name="post_id" , value=""> Unread
+                        </button>
+                    {% endif %}
+                {% endif %}
+            </form>
+            </div>
+        {% endif %}
+    </div>
+
+
+{% endblock %}

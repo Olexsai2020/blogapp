@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  blog_web:
+    build: .
+    image: blog:web
+    container_name: blog_web
+    tty: true
+    stdin_open: true
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    links:
+      - blog_db:db
+    environment:
+      STAGE: docker
+      ENVIRONMENT: dev
+      DJANGO_SETTINGS_MODULE: blog.settings
+      PYTHONIOENCODING: UTF-8
+      DB_URL: ${DB_URL}
+
+  blog_db:
+    image: postgres
+    container_name: blog_db
+    ports:
+      - 35432:5432
+    environment:
+      POSTGRES_DB: blog
+      POSTGRES_PASSWORD: example

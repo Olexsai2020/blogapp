@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}
+    Add Blog Post
+{% endblock %}
+{% block content %}
+
+    <h1>Add Post</h1>
+    <form method="post">
+        <div>
+            {% csrf_token %}
+            {{ form.media }}
+            {{ form.as_p }}
+            <button class="btn btn-secondary">Post</button>
+        </div>
+        <script>
+            var name = "{{ user.id }}";
+            document.getElementById("person").value = name;
+        </script>
+    </form>
+{% endblock %}
