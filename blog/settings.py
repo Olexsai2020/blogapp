@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'blog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DB_URL = os.environ.get("DB_URL", "postgres://postgres:example@oca_praga_cms_db:5432/oca_praga")
+DB_URL = os.environ.get("DB_URL", "postgres://postgres:example@blog_db:5432/blog")
 DATABASES = {"default": dj_database_url.config(default=DB_URL)}
 
 
