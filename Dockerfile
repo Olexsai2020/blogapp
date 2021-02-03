@@ -4,7 +4,7 @@
 ############################################################
 
 FROM ubuntu:18.04
-#MAINTAINER Igor Kurochka <igor.k@edicasoft.com>
+
 
 # Setup environment
 ENV DEBIAN_FRONTEND noninteractive
