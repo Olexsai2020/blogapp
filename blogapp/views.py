@@ -6,12 +6,21 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.core.mail import send_mass_mail
+from django.conf import settings
+from django.db.models import Q
 
 
 class PostListView(ListView):
-    queryset = Post.objects.order_by('-created_on')
     template_name = 'post_list.html'
     paginate_by = 5
+
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        if query:
+            return Post.objects.filter(
+                Q(title__icontains=query) | Q(author__username__icontains=query) | Q(content__icontains=query)).distinct()
+        else:
+            return Post.objects.order_by('-created_on')
 
 
 class PostDetailView(DetailView):
@@ -45,12 +54,12 @@ class AddPostView(CreateView):
 
     def form_valid(self, form):
         author = form.cleaned_data.get('author')
-        subscibes = Profile.objects.get_or_create(user=author)[0].followers.all()
-        if subscibes:
+        subscribes = Profile.objects.get_or_create(user=author)[0].followers.all()
+        if subscribes:
             messages = list()
             subject = 'New post was added'
-            from_email = 'your_email@gmail.com'
-            for person in subscibes:
+            from_email = settings.EMAIL_HOST_USER
+            for person in subscribes:
                 body = f"Hi {person.username}! Dont miss {author}'s new post{form.cleaned_data.get('title')}"
                 message2 = subject, body, from_email, [person.email]
                 messages.append(message2)
@@ -85,6 +94,7 @@ class MySubscriptsView(ListView):
     def get_queryset(self):
         users = Profile.objects.get_or_create(user=self.request.user)[0].following.all()
         return Post.objects.filter(author__in=users)
+
 
 def like_view(request, pk):
     post = get_object_or_404(Post, id=pk)

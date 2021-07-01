@@ -12,7 +12,7 @@
 
     <title>
         {% block title %}
-            Fary Blogs
+        Fary Blogs
         {% endblock %}
     </title>
 </head>
@@ -22,15 +22,19 @@
         <ul class="navbar-nav mr-auto">
             {% if user.is_authenticated %}
 
-                <li class="nav-item">
-                    <a class="navbar-brand" href="{% url 'user_blog'  user.id  %}"> My blog </a>
-                </li>
-                <li class="nav-item active">
-                    <a class="navbar-brand" href="{% url 'add_post' %}">Add post</a>
-                </li>
-                <li class="nav-item">
-                    <a class="navbar-brand" href="{% url 'my_subscripts' %}"> Favorite </a>
-                </li>
+            <li class="nav-item">
+                <a class="navbar-brand" href="{% url 'user_blog'  user.id  %}"> My blog </a>
+            </li>
+            <li class="nav-item active">
+                <a class="navbar-brand" href="{% url 'add_post' %}">Add post</a>
+            </li>
+            <li class="nav-item">
+                <a class="navbar-brand" href="{% url 'my_subscripts' %}"> Favorite </a>
+            </li>
+            <form class="d-flex" action="/">
+                <input class="form-control mr-0" type="search" value="{{request.GET.q}}" name="q" placeholder="Search"
+                       aria-label="Search">
+            </form>
             {% endif %}
         </ul>
     </div>
@@ -43,20 +47,20 @@
     <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
         <ul class="navbar-nav ml-auto">
             {% if user.is_authenticated %}
-                <li class="navbar-brand">
-                    {{ user }}
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Logout  </a>
-                </li>
+            <li class="navbar-brand">
+                {{ user }}
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Logout </a>
+            </li>
             {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Login</a>
-                </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}">Register</a>
-                </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'register' %}">Register</a>
+            </li>
             {% endif %}
 
         </ul>
